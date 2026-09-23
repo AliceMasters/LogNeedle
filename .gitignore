@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pyre_configuration
+pyrightconfig.json
+build/
+dist/
+*.spec
+.env
+*.log
+logs/
+logneedle_report_*.md
+reports/
+test_output.txt
