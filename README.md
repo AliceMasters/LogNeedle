@@ -3,6 +3,7 @@
 **Log Analysis & Timeline** — a Windows desktop app that turns a bundle of logs into a
 clean, evidence-backed timeline and "needle in the haystack" findings.
 
+[![CI](https://github.com/AliceMasters/LogNeedle/actions/workflows/ci.yml/badge.svg)](https://github.com/AliceMasters/LogNeedle/actions/workflows/ci.yml)
 ![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)
 ![PySide6](https://img.shields.io/badge/GUI-PySide6-green)
 ![DuckDB](https://img.shields.io/badge/storage-DuckDB-yellow)

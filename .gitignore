@@ -12,4 +12,4 @@ dist/
 logs/
 logneedle_report_*.md
 reports/
-test_output.txt
+test_output.txttest-results.xml
