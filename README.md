@@ -38,7 +38,7 @@ python -m src.main
 | **Boot/Shutdown** | Detects Kernel-Power 41, EventLog 6005/6006/6008, BugCheck |
 | **Evidence Citations** | Every bullet references source file + line or EVTX record |
 | **Export** | Markdown, HTML (dark-themed), and Plain Text |
-| **Redact Secrets** | Toggle to mask GUIDs, bearer tokens, API keys, emails |
+| **Redact Secrets** | Toggle to mask GUIDs, bearer tokens, API keys, JWTs, AWS keys, PEM private keys, emails, and Windows profile usernames |
 | **Search & Filter** | By level, source type, provider, file name, free text |
 
 ## Architecture
