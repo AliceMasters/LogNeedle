@@ -3,6 +3,10 @@
 **Log Analysis & Timeline** — a Windows desktop app that turns a bundle of logs into a
 clean, evidence-backed timeline and "needle in the haystack" findings.
 
+**Why it exists:** figuring out what happened from logs by hand, especially across a
+reboot, is slow and easy to get wrong. LogNeedle merges everything into one ordered timeline
+and points out the lines that matter.
+
 [![CI](https://github.com/AliceMasters/LogNeedle/actions/workflows/ci.yml/badge.svg)](https://github.com/AliceMasters/LogNeedle/actions/workflows/ci.yml)
 ![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)
 ![PySide6](https://img.shields.io/badge/GUI-PySide6-green)
@@ -79,10 +83,14 @@ src/
 ## Running Tests
 
 ```powershell
-python tests/test_timestamp.py
-python tests/test_text_parser.py
-python tests/test_storm.py
-python tests/test_redact.py
+pip install pytest
+pytest -q
+```
+
+CI runs the same suite on Windows and Linux (Python 3.11 and 3.12).
+
+```powershell
+pytest tests/test_redact.py -v   # single file
 ```
 
 ## Building a Standalone .exe
