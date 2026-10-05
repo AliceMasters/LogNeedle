@@ -102,6 +102,12 @@ pyinstaller logneedle.spec
 
 The resulting `dist/LogNeedle/LogNeedle.exe` is a self-contained application.
 
+## 📜 Patch notes
+
+**Latest: Patch 1.3, *"Outside UTC"*** (Oct 5, 2026). Fixed a timezone bug that put mixed-format timelines out of order on non-UTC machines, and made CI re-run the suite in New York, Kolkata and Auckland so it can't hide again.
+
+[Full patch history →](CHANGELOG.md)
+
 ## License
 
 MIT
