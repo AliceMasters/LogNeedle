@@ -94,8 +94,9 @@ def parse_timestamp(
         if dt.tzinfo is not None:
             return (dt.astimezone(timezone.utc), raw, False)
         else:
-            # assume local time
-            return (dt.replace(tzinfo=timezone.utc), raw, True)
+            # No zone in the log line: interpret it as the analysing machine's
+            # local time (DST-aware) and convert, so it lines up with tz-aware sources.
+            return (dt.astimezone(timezone.utc), raw, True)
     return (None, "", False)
 
 

@@ -2,7 +2,9 @@
 Unit tests for LogNeedle - text log parser.
 """
 
-import sys, os, tempfile
+import sys, os
+import tempfile
+from datetime import datetime, timezone
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from src.parsers.text_parser import TextLogParser
@@ -50,7 +52,8 @@ def test_csv_parsing():
 
     assert len(events) == 2, f"Expected 2 events, got {len(events)}"
     assert events[0]["event_time_utc"] is not None
-    assert events[0]["event_time_utc"].hour == 14  # 2:30 PM -> 14:30
+    # 2:30 PM local wall-clock, stored as the matching UTC instant
+    assert events[0]["event_time_utc"] == datetime(2025, 11, 17, 14, 30).astimezone(timezone.utc)
     print("  PASS CSV parsing works")
 
 

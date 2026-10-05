@@ -9,14 +9,17 @@ from datetime import datetime, timezone
 from src.parsers.timestamp import parse_timestamp
 
 
+def local_to_utc(*args):
+    """The UTC instant for a wall-clock time on this machine (what a zone-less log line means)."""
+    return datetime(*args).astimezone(timezone.utc)
+
+
 def test_iso8601_utc():
     dt, raw, assumed = parse_timestamp("2025-11-17T06:22:13.123Z some log message")
     assert dt is not None
     assert dt.tzinfo == timezone.utc
     assert dt.year == 2025
-    assert dt.month == 11
-    assert dt.day == 17
-    assert dt.hour == 6
+    assert dt.hour == 6  # explicit Z: no local conversion
     assert dt.minute == 22
     assert not assumed
 
@@ -31,9 +34,7 @@ def test_iso8601_offset():
 
 def test_dash_separated():
     dt, raw, assumed = parse_timestamp("2025-11-17 14:30:00.500  INFO  Starting")
-    assert dt is not None
-    assert dt.year == 2025
-    assert dt.hour == 14
+    assert dt == local_to_utc(2025, 11, 17, 14, 30, 0, 500000)
     assert assumed  # no tz info
 
 
@@ -48,17 +49,13 @@ def test_slash_separated():
 def test_syslog_style():
     dt, raw, assumed = parse_timestamp("Nov 17 06:22:13 myhost kernel: something", reference_year=2025)
     assert dt is not None
-    assert dt.month == 11
-    assert dt.day == 17
-    assert dt.hour == 6
+    assert dt == local_to_utc(2025, 11, 17, 6, 22, 13)
     assert assumed
 
 
 def test_us_datetime():
     dt, raw, assumed = parse_timestamp("11/17/2025 2:30:00 PM  Action executed")
-    assert dt is not None
-    assert dt.hour == 14
-    assert dt.minute == 30
+    assert dt == local_to_utc(2025, 11, 17, 14, 30, 0)
     assert assumed
 
 
@@ -88,3 +85,17 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"  FAIL {t.__name__}: EXCEPTION {e}")
     print(f"\n{passed}/{len(tests)} passed")
+
+
+def test_naive_and_utc_sources_align():
+    """Regression: a zone-less line is local time, not UTC.
+
+    The same instant written as local wall-clock and as explicit UTC must parse to
+    the same moment, or a bundle mixing log formats produces an out-of-order
+    timeline on any machine not set to UTC. CI runs this under a non-UTC TZ.
+    """
+    instant = local_to_utc(2026, 9, 14, 2, 25, 0)
+    naive, _, assumed_naive = parse_timestamp("2026-09-14 02:25:00 ERROR disk full")
+    zulu, _, assumed_zulu = parse_timestamp(f"{instant:%Y-%m-%dT%H:%M:%S}Z ERROR disk full")
+    assert naive == zulu == instant
+    assert assumed_naive and not assumed_zulu
