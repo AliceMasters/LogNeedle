@@ -40,9 +40,8 @@ def test_dash_separated():
 
 def test_slash_separated():
     dt, raw, assumed = parse_timestamp("2025/01/05 08:00:00 Service starting")
-    assert dt is not None
-    assert dt.month == 1
-    assert dt.day == 5
+    # Compare instants, not calendar fields: east of UTC this is still 4 Jan in UTC.
+    assert dt == local_to_utc(2025, 1, 5, 8, 0, 0)
     assert assumed
 
 
